@@ -1,0 +1,26 @@
+{
+  "name": "urlshortener",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "webpack",
+      "watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmsterGet/URLShortener.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AmsterGet/URLShortener/issues"
+  },
+  "homepage": "https://github.com/AmsterGet/URLShortener#readme",
+  "devDependencies": {
+    "mongoose": "^5.0.12",
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13"
+  }
+}
