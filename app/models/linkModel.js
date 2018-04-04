@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 
-const linkSchema = mongoose.Schema({
+const linkScheme = mongoose.Schema({
   originalUrl: String,
   shortUrl: String,
   postDate: Date,
   transitions: Number,
   description: String,
   tags: [],
-  user_id: mongoose.Schema.Types.ObjectId,
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 }, { versionKey: false });
 
-module.exports = linkSchema;
+module.exports.linkModel = mongoose.model("Link", linkScheme);

@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-const linkSchema = require("./linkSchema");
-const userSchema = require("./userSchema");
+const linkModel = require("./linkModel");
+const userModel = require("./userModel");
 
 module.exports = {
-  User: mongoose.model("User", userSchema),
-  Link: mongoose.model("Link", linkSchema),
+  User: userModel,
+  Link: linkModel,
 };
