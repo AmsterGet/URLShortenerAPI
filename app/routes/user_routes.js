@@ -1,53 +1,54 @@
+const mongoose = require("mongoose");
 const models = require("../models");
 const utils = require("../utils");
 
 module.exports = function (app) {
-  app.post("/newUser", (req, res) => {
+  // add new link
+  app.post("/:userLogin/links/", (req, res) => {
     console.log(req.body);
-    const newUser = new models.User({
-      name: req.body.name,
-      login: req.body.login,
-      password: req.body.password,
-      mail: req.body.mail,
-    });
-
-    newUser.save()
-      .then((user) => {
-        res.send("Wrote in database: " + JSON.stringify(user));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  });
-
-  app.post("/:userId/links/", (req, res) => {
-    console.log(req.body);
+    // add link's unique check here
     const { originalUrl } = req.body;
     const shortUrl = utils.generateShortUrl(originalUrl);
 
-    const newLink = new models.Link({
-      originalUrl,
-      shortUrl,
-      postDate: new Date(),
-      transitions: 0,
-      description: req.body.description,
-      tags: req.body.tags.split(", "),
-      user: mongoose.Types.ObjectId(req.body.userId),
-    });
+    const details = {
+      login: req.body.login,
+    };
 
-    newLink.save()
+    models.User.find(details)
+      .then((user) => {
+        const newLink = new models.Link({
+          originalUrl,
+          shortUrl,
+          postDate: new Date(),
+          transitions: 0,
+          description: req.body.description,
+          tags: req.body.tags.split(", "),
+          user: user._id,
+        });
+
+        return newLink.save();
+      })
       .then((link) => {
         res.send(link);
       })
       .catch((error) => {
         console.error(error);
+        res.send(error);
       });
   });
+  // get all user's links
+  app.get("/:userLogin/links/", (req, res) => {
 
-  app.delete("/:userId/links/:linkId", (req, res) => {
-    const { linkId } = req.params;
+  });
+  // for edit information about link
+  app.put("/:userLogin/links/:shortUrl", (req, res) => {
+
+  });
+
+  app.delete("/:userLogin/links/:shortUrl", (req, res) => {
+    const { shortUrl } = req.params;
     const details = {
-      _id: new mongoose.Types.ObjectId(linkId),
+      shortUrl,
     };
     models.Link.remove(details)
       .then((link) => {

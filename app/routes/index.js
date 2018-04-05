@@ -4,6 +4,6 @@ const linkRoutes = require("./link_routes");
 
 module.exports = function (app) {
   rootRoutes(app);
-  userRoutes(app);
   linkRoutes(app);
+  userRoutes(app);
 };
