@@ -1,15 +1,16 @@
 const models = require("../models");
 const utils = require("../utils");
 
-module.exports.UserManager = {
+const userManager = {
   createUser: function createNewUser(userData) {
     const user = {
       name: userData.name,
       login: userData.login,
-      email: userData.email,
+      mail: userData.mail,
       password: utils.hash(userData.password),
     };
-    return new models.User(user).save();
+    const newUser = new models.User(user);
+    return newUser.save();
   },
   getUser: function getUserData(login) {
     return models.User.findOne(login);
@@ -19,9 +20,11 @@ module.exports.UserManager = {
       .then((user) => {
         if (user.password === utils.hash(userData.password).toString()) {
           console.log("User's password is ok!");
-          Promise.resolve(user);
+          return Promise.resolve(user);
         }
-        Promise.reject(new Error("Incorrect password!"));
+        return Promise.reject(new Error("Incorrect password!"));
       });
   },
 };
+
+module.exports = userManager;

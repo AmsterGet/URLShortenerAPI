@@ -10,4 +10,4 @@ const linkScheme = mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "UserManager" },
 }, { versionKey: false });
 
-module.exports.linkModel = mongoose.model("Link", linkScheme);
+module.exports = mongoose.model("Link", linkScheme);

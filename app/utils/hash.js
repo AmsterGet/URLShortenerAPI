@@ -5,4 +5,4 @@ function hash(text) {
     .update(text).digest("base64");
 }
 
-module.exports.hash = hash;
+module.exports = hash;

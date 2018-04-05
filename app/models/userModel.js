@@ -5,7 +5,7 @@ const userScheme = mongoose.Schema({
   mail: String,
   login: {
     type: String,
-    unique: true,
+    // unique: true,
     required: true,
   },
   password: {
@@ -14,4 +14,4 @@ const userScheme = mongoose.Schema({
   },
 }, { versionKey: false });
 
-module.exports.userModel = mongoose.model("UserManager", userScheme);
+module.exports = mongoose.model("User", userScheme);
