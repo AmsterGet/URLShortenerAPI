@@ -1,13 +1,7 @@
-
-function generateShortUrl(originalUrl) {
-  return originalUrl.slice(1, 6);
-}
-
-function verifyUser(user) {
-  // some MongoDB's session's checks
-}
+const hash = require("./hash");
+const generateShortUrl = require("./generateShortUrl");
 
 module.exports = {
   generateShortUrl,
-  verifyUser,
+  hash,
 };

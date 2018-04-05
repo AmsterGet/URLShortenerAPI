@@ -7,7 +7,7 @@ const linkScheme = mongoose.Schema({
   transitions: Number,
   description: String,
   tags: [],
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "UserManager" },
 }, { versionKey: false });
 
 module.exports.linkModel = mongoose.model("Link", linkScheme);
