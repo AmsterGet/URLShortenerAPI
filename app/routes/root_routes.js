@@ -3,7 +3,7 @@ const { userManager } = require("../managers");
 module.exports = function (app) {
   app.get("/", (req, res) => { // request like /?shortUrl="ad1sda"
     const { shortUrl } = req.query;
-    res.redirect(`/${shortUrl}/info`);
+    res.redirect(`${req.hostname}/${shortUrl}/info`);
   });
   // authorize user
   app.post("/signIn", (req, res, next) => {
@@ -11,7 +11,8 @@ module.exports = function (app) {
       .then((user) => {
         if (user) {
           req.session.user = { id: user._id, login: user.login };
-          res.redirect(`/${req.session.user.login}/links`);
+          res.redirect(`${req.hostname}/user/${user.login}/links`);
+          // res.send(user);
         } else {
           return next(new Error());
         }
@@ -27,8 +28,8 @@ module.exports = function (app) {
       .then((user) => {
         console.log("Wrote in database: " + JSON.stringify(user));
         req.session.user = { id: user._id, login: user.login };
-        res.redirect(`/${user.login}/links`);
-        // res.send(req.session);
+        // res.redirect(`${req.hostname}/user/${user.login}/links`);
+        res.send(req.session);
       })
       .catch((error) => {
         console.error(error);
@@ -39,7 +40,7 @@ module.exports = function (app) {
   app.post("/signOut", (req, res, next) => {
     if (req.session.user) {
       delete req.session.user;
-      res.redirect("/");
+      res.redirect(`${req.hostname}/`);
     }
   });
 };
