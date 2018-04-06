@@ -1,5 +1,5 @@
-const models = require("../models");
-const utils = require("../utils");
+const { User } = require("../models");
+const { hash } = require("../utils");
 
 const userManager = {
   createUser: function createNewUser(userData) {
@@ -7,18 +7,18 @@ const userManager = {
       name: userData.name,
       login: userData.login,
       mail: userData.mail,
-      password: utils.hash(userData.password),
+      password: hash(userData.password),
     };
-    const newUser = new models.User(user);
+    const newUser = new User(user);
     return newUser.save();
   },
   getUser: function getUserData(login) {
-    return models.User.findOne(login);
+    return User.findOne(login);
   },
   checkUser: function checkUserData(userData) {
-    return models.User.findOne({ login: userData.login })
+    return User.findOne({ login: userData.login })
       .then((user) => {
-        if (user.password === utils.hash(userData.password).toString()) {
+        if (user.password === hash(userData.password).toString()) {
           console.log("User's password is ok!");
           return Promise.resolve(user);
         }

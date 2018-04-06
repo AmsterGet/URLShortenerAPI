@@ -12,7 +12,6 @@ const port = 1212;
 
 mongoose.connect(config.dbConfig.url)
   .then(() => {
-    routes(app);
     app.use(session({
       secret: config.sessionConfig.secret,
       resave: false,
@@ -21,6 +20,7 @@ mongoose.connect(config.dbConfig.url)
         url: config.dbConfig.url,
       }),
     }));
+    routes(app);
     return app.listen(port);
   })
   .then(() => {

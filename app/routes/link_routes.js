@@ -1,4 +1,4 @@
-const models = require("../models");
+const { Link } = require("../models");
 
 module.exports = function (app) {
   app.get("/:shortUrl", (req, res) => {
@@ -7,7 +7,7 @@ module.exports = function (app) {
       shortUrl,
     };
 
-    models.Link.find(details)
+    Link.find(details)
       .then((link) => {
         // increase link's transitions counter here
         res.redirect(link.originalUrl);
@@ -23,7 +23,7 @@ module.exports = function (app) {
     const details = {
       shortUrl,
     };
-    models.Link.find(details)
+    Link.find(details)
       .then((link) => {
         res.send(link);
       })
@@ -40,7 +40,7 @@ module.exports = function (app) {
       tagName,
     };
     // rewrite search request for correct work
-    models.Link.find(details)
+    Link.find(details)
       .then((links) => {
         res.send(links);
       })

@@ -1,12 +1,12 @@
 const { userManager } = require("../managers");
-// fix sessions creation here
+
 module.exports = function (app) {
   app.get("/", (req, res) => { // request like /?shortUrl="ad1sda"
     const { shortUrl } = req.query;
     res.redirect(`/${shortUrl}/info`);
   });
-  // for authorization
-  app.post("/singIn", (req, res, next) => {
+  // authorize user
+  app.post("/signIn", (req, res, next) => {
     userManager.checkUser(req.body)
       .then((user) => {
         if (user) {
@@ -27,8 +27,8 @@ module.exports = function (app) {
       .then((user) => {
         console.log("Wrote in database: " + JSON.stringify(user));
         req.session.user = { id: user._id, login: user.login };
-        // res.redirect(`/${user.login}/links`);
-        res.send(user);
+        res.redirect(`/${user.login}/links`);
+        // res.send(req.session);
       })
       .catch((error) => {
         console.error(error);

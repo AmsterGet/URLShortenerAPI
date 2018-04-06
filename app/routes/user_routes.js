@@ -1,9 +1,10 @@
 const models = require("../models");
 const utils = require("../utils");
+const { userManager } = require("../managers");
 
 module.exports = function (app) {
   // add new link
-  app.post("/:userLogin/links/", (req, res) => {
+  app.post("/:userLogin/links/", userManager.checkUser(), (req, res) => {
     console.log(req.body);
     // add link's unique check here
     const { originalUrl } = req.body;
