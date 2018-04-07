@@ -6,7 +6,9 @@ const linkScheme = mongoose.Schema({
   postDate: Date,
   transitions: Number,
   description: String,
-  tags: [],
+  tags: [{
+    tagName: String,
+  }],
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 }, { versionKey: false });
 

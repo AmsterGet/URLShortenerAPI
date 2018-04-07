@@ -1,15 +1,14 @@
 const { Link } = require("../models");
 
-module.exports = function (app) {
+module.exports = function (app) { // Done
   app.get("/:shortUrl", (req, res) => {
     const { shortUrl } = req.params;
-    const details = {
+    const queryDetails = {
       shortUrl,
     };
 
-    Link.find(details)
+    Link.findOneAndUpdate(queryDetails, { $inc: { transitions: 1 } })
       .then((link) => {
-        // increase link's transitions counter here
         res.redirect(link.originalUrl);
       })
       .catch((error) => {
@@ -18,12 +17,12 @@ module.exports = function (app) {
       });
   });
 
-  app.get("/:shortUrl/info", (req, res) => {
+  app.get("/:shortUrl/info", (req, res) => { // Done
     const { shortUrl } = req.params;
-    const details = {
+    const queryDetails = {
       shortUrl,
     };
-    Link.find(details)
+    Link.find(queryDetails)
       .then((link) => {
         res.send(link);
       })
@@ -34,13 +33,12 @@ module.exports = function (app) {
   });
 
   // for find all links via tagName
-  app.get("/:shortUrl/info/:tagName", (req, res) => {
+  app.get("/:shortUrl/info/:tagName", (req, res) => { // Done
     const { tagName } = req.params;
-    const details = {
-      tagName,
+    const queryDetails = {
+      "tags.tagName": tagName,
     };
-    // rewrite search request for correct work
-    Link.find(details)
+    Link.find(queryDetails)
       .then((links) => {
         res.send(links);
       })
