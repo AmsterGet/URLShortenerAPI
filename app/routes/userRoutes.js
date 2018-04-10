@@ -1,4 +1,4 @@
-const userRoutesHandler = require("../common/userRoutesHandler");
+const userRoutesHandler = require("../common/routesHandlers/userRoutesHandler");
 
 module.exports = function (app) {
   app.route("/user/:userLogin/links/")

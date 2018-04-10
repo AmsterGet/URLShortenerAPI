@@ -1,5 +1,5 @@
 const { User } = require("../models");
-const { hash } = require("../utils");
+const { hash } = require("../common/utils");
 
 const userManager = {
   createUser: function createNewUser(userData) {

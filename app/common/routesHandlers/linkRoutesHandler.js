@@ -1,4 +1,4 @@
-const { Link } = require("../models");
+const { Link } = require("../../models/index");
 
 const linkRoutesHandler = {
   shortLinkRedirect: (req, res) => {

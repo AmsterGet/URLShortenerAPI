@@ -1,6 +1,6 @@
-const rootRoutes = require("./root_routes");
-const userRoutes = require("./user_routes");
-const linkRoutes = require("./link_routes");
+const rootRoutes = require("./rootRoutes");
+const userRoutes = require("./userRoutes");
+const linkRoutes = require("./linkRoutes");
 
 module.exports = function (app) {
   rootRoutes(app);

@@ -1,5 +1,5 @@
-const { userManager } = require("../managers");
-const models = require("../models");
+const { userManager } = require("../../managers/index");
+const models = require("../../models/index");
 
 const rootRoutesHandler = {
   signIn: (req, res, next) => {

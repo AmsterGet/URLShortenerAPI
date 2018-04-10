@@ -1,19 +1,18 @@
-const models = require("../models");
-const utils = require("../utils");
-const { linkManager } = require("../managers");
+const models = require("../../models/index");
+const utils = require("../utils/index");
+const { userManager, linkManager } = require("../../managers/index");
 
 const userRoutesHandler = {
-  addNewLink: (req, res) => { // Done
+  addNewLink: (req, res) => {
     console.log(req.body);
     const { userLogin } = req.params;
     const { originalUrl } = req.body;
-    const shortUrl = utils.generateShortUrl(originalUrl);
+    const shortUrl = utils.generateShortUrl();
     const queryDetails = {
       login: userLogin,
     };
     const tags = linkManager.mapTagsToNotes(req.body.tags.split(", "));
-
-    models.User.findOne(queryDetails)
+    userManager.getUser(queryDetails)
       .then((user) => {
         console.log(user);
         const newLink = new models.Link({
@@ -41,7 +40,7 @@ const userRoutesHandler = {
     const queryDetails = {
       login: userLogin,
     };
-    models.User.find(queryDetails)
+    userManager.getUser(queryDetails)
       .then((user) => {
         return models.Link.find({ "user._id": user._id });
       })

@@ -5,7 +5,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const config = require("../config");
 const routes = require("./routes");
-const userRoutesHandler = require("./common/userRoutesHandler");
+const userRoutesHandler = require("./common/routesHandlers/userRoutesHandler");
 
 const app = express();
 app.use(bodyParser.json());

@@ -1,4 +1,4 @@
-const rootRoutesHandler = require("../common/rootRoutesHandler");
+const rootRoutesHandler = require("../common/routesHandlers/rootRoutesHandler");
 
 module.exports = function (app) {
   app.post("/signIn", rootRoutesHandler.signIn);
