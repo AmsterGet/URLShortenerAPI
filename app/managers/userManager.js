@@ -12,9 +12,6 @@ const userManager = {
     const newUser = new User(user);
     return newUser.save();
   },
-  getUser: function getUserData(login) {
-    return User.findOne(login);
-  },
   checkUser: function checkUserData(userData) {
     return User.findOne({ login: userData.login })
       .then((user) => {

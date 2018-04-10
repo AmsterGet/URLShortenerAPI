@@ -12,7 +12,7 @@ const userRoutesHandler = {
       login: userLogin,
     };
     const tags = linkManager.mapTagsToNotes(req.body.tags.split(", "));
-    userManager.getUser(queryDetails)
+    models.User.findOne(queryDetails)
       .then((user) => {
         console.log(user);
         const newLink = new models.Link({
@@ -40,7 +40,7 @@ const userRoutesHandler = {
     const queryDetails = {
       login: userLogin,
     };
-    userManager.getUser(queryDetails)
+    models.User.findOne(queryDetails)
       .then((user) => {
         return models.Link.find({ "user._id": user._id });
       })
@@ -53,7 +53,7 @@ const userRoutesHandler = {
       });
   },
 
-  editLink: (req, res) => { // Done
+  editLink: (req, res) => {
     const { shortUrl } = req.params;
     const queryDetails = {
       shortUrl,
