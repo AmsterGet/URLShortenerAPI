@@ -25,7 +25,7 @@ const linkRoutesHandler = {
     const queryDetails = {
       shortUrl,
     };
-    Link.find(queryDetails)
+    Link.findOne(queryDetails)
       .then((link) => {
         res.send(link);
       })
