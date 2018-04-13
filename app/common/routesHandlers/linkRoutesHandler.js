@@ -9,14 +9,14 @@ const linkRoutesHandler = {
 
     Link.findOneAndUpdate(queryDetails, { $inc: { transitions: 1 } })
       .then((link) => {
-        if (!link.originalUrl) {
-          return new Error();
-        }
+        // if (!link.originalUrl) {
+        //   throw new Error("");
+        // }
         res.redirect(link.originalUrl);
       })
       .catch((error) => {
         console.error(error);
-        res.send("The link is not found!");
+        res.status(404).send();
       });
   },
 
@@ -27,6 +27,9 @@ const linkRoutesHandler = {
     };
     Link.findOne(queryDetails)
       .then((link) => {
+        if (!link) {
+          return res.status(404).send("Link was not found!");
+        }
         res.send(link);
       })
       .catch((error) => {
@@ -36,6 +39,7 @@ const linkRoutesHandler = {
   },
 
   findLinksByTagName: (req, res) => {
+    console.log(req.params);
     const { tagName } = req.params;
     const queryDetails = {
       "tags.tagName": tagName,

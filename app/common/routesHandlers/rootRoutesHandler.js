@@ -51,8 +51,3 @@ const rootRoutesHandler = {
 };
 
 module.exports = rootRoutesHandler;
-
-// app.get("/", (req, res) => { // request like /?shortUrl="ad1sda" - REWRITE IT for UI's needs
-//   const { shortUrl } = req.query;
-//   res.redirect(`${req.hostname}/${shortUrl}/info`);
-// });

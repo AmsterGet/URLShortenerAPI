@@ -15,11 +15,15 @@ const userManager = {
   checkUser: function checkUserData(userData) {
     return User.findOne({ login: userData.login })
       .then((user) => {
+        let errorMessage = "Incorrect password!";
+        if (!user) {
+          errorMessage = "Infamous user!";
+        }
         if (user.password === hash(userData.password).toString()) {
           console.log("User's password is ok!");
           return Promise.resolve(user);
         }
-        return Promise.reject(new Error("Incorrect password!"));
+        return Promise.reject(new Error(errorMessage));
       });
   },
 };
