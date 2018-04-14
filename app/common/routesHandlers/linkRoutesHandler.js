@@ -1,7 +1,7 @@
 const { Link } = require("../../models/index");
 
 const linkRoutesHandler = {
-  shortLinkRedirect: (req, res) => {
+  shortLinkRedirect: (req, res, next) => {
     const { shortUrl } = req.params;
     const queryDetails = {
       shortUrl,

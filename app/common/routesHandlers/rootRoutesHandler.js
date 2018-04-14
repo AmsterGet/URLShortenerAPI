@@ -41,12 +41,13 @@ const rootRoutesHandler = {
   },
 
   signOut: (req, res) => {
+    console.log(req.body);
     if (req.session.user) {
       delete req.session.user;
-      res.send({
-        message: "Sign out was complete!",
-      });
     }
+    res.send({
+      message: "Sign out was complete!",
+    });
   },
 };
 
