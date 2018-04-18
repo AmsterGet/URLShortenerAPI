@@ -30,7 +30,7 @@ const userRoutesHandler = {
         res.send(link); // or notification that record written
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         res.send(error);
       });
   },
@@ -48,7 +48,7 @@ const userRoutesHandler = {
         res.send(links);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         res.send(error);
       });
   },
@@ -69,12 +69,12 @@ const userRoutesHandler = {
         res.send(link); // or notification that record updated
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         res.send(error);
       });
   },
 
-  removeLink: (req, res) => { // Done
+  removeLink: (req, res) => {
     const { shortUrl } = req.params;
     const details = {
       shortUrl,
@@ -85,17 +85,9 @@ const userRoutesHandler = {
         res.send("Link was deleted" + link);
       })
       .catch((error) => {
-        console.error(error);
+        console.log(error);
         res.send(error);
       });
-  },
-
-  authenticateUser: (req, res, next) => { // TODO: fix it
-    // const { userLogin } = req.params;
-    // if (req.session.user.login !== userLogin) {
-    //   res.send("SignIn, please!");
-    // }
-    next();
   },
 };
 

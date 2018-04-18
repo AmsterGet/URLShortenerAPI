@@ -1,9 +1,9 @@
-const rootRoutes = require("./rootRoutes");
+const authRoutes = require("./authRoutes");
 const userRoutes = require("./userRoutes");
 const linkRoutes = require("./linkRoutes");
 
-module.exports = function (app) {
-  rootRoutes(app);
+module.exports = (app) => {
+  authRoutes(app);
   linkRoutes(app);
   userRoutes(app);
 };

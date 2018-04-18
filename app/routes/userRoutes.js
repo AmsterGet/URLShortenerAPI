@@ -1,6 +1,6 @@
 const userRoutesHandler = require("../common/routesHandlers/userRoutesHandler");
 
-module.exports = function (app) {
+module.exports = (app) => {
   app.route("/user/:userLogin/links/")
     .post(userRoutesHandler.addNewLink)
     .get(userRoutesHandler.getUserLinks);
