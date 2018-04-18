@@ -6,7 +6,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const config = require("../config");
 const routes = require("./routes");
-const isSignedIn = require("./common/middleware/isSignedIn");
+const authenticateUser = require("./common/middleware/authenticateUser");
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +15,8 @@ app.use(session({
   secret: config.sessionConfig.secret,
   resave: false,
   saveUninitialized: false,
+  cookie: { secure: true },
+  unset: "destroy",
   store: new MongoStore({
     url: config.dbConfig.url,
   }),
@@ -27,7 +29,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-app.use("/user/:userLogin/", isSignedIn);
+// app.use("/user/:userLogin/", authenticateUser);
 const port = 1212;
 
 mongoose.connect(config.dbConfig.url)

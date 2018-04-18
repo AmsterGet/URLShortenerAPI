@@ -4,7 +4,6 @@ const { userManager, linkManager } = require("../../managers/index");
 
 const userRoutesHandler = {
   addNewLink: (req, res) => {
-    console.log(req.body);
     const { userLogin } = req.params;
     const { originalUrl } = req.body;
     const shortUrl = utils.generateShortUrl();
@@ -27,7 +26,7 @@ const userRoutesHandler = {
         return newLink.save();
       })
       .then((link) => {
-        res.send(link); // or notification that record written
+        res.send(link);
       })
       .catch((error) => {
         console.log(error);

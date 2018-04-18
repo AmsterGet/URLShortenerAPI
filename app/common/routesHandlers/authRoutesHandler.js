@@ -27,8 +27,8 @@ const authRoutesHandler = {
   },
 
   signOut: (req, res) => {
-    console.log(req.body);
-    req.logout();
+    req.logOut();
+    req.session.destroy();
     res.send({
       message: "Sign out was complete!",
     });
