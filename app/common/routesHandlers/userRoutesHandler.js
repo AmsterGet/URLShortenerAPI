@@ -13,7 +13,6 @@ const userRoutesHandler = {
     const tags = linkManager.mapTagsToNotes(req.body.tags.split(", "));
     models.User.findOne(queryDetails)
       .then((user) => {
-        console.log(user);
         const newLink = new models.Link({
           originalUrl,
           shortUrl,
@@ -41,12 +40,9 @@ const userRoutesHandler = {
     };
     models.User.findOne(queryDetails)
       .then((user) => {
-        console.log("-------------------------------------------------------------");
-        console.log(user);
         return models.Link.find({ "user": user._id });
       })
       .then((links) => {
-        console.log(links);
         res.send({ links });
       })
       .catch((error) => {
@@ -56,7 +52,7 @@ const userRoutesHandler = {
   },
 
   editLink: (req, res) => {
-    const { shortUrl } = req.params;
+    const { shortUrl } = req.body;
     const queryDetails = {
       shortUrl,
     };
@@ -68,7 +64,7 @@ const userRoutesHandler = {
 
     models.Link.findOneAndUpdate(queryDetails, { $set: updateDetails })
       .then((link) => {
-        res.send(link); // or notification that record updated
+        res.send(link);
       })
       .catch((error) => {
         console.log(error);
@@ -77,14 +73,14 @@ const userRoutesHandler = {
   },
 
   removeLink: (req, res) => {
-    const { shortUrl } = req.params;
+    const { shortUrl } = req.body;
     const details = {
       shortUrl,
     };
     models.Link.remove(details)
       .then((link) => {
         console.log("Success - link was deleted!");
-        res.send("Link was deleted" + link);
+        res.send(link);
       })
       .catch((error) => {
         console.log(error);

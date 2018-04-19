@@ -6,7 +6,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const config = require("../config");
 const routes = require("./routes");
-const authenticateUser = require("./common/middleware/authenticateUser");
+// const authenticateUser = require("./common/middleware/authenticateUser");
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,6 +26,7 @@ app.use(passport.session());
 config.passport();
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
