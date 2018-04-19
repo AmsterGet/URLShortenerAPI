@@ -41,10 +41,13 @@ const userRoutesHandler = {
     };
     models.User.findOne(queryDetails)
       .then((user) => {
-        return models.Link.find({ "user._id": user._id });
+        console.log("-------------------------------------------------------------");
+        console.log(user);
+        return models.Link.find({ "user": user._id });
       })
       .then((links) => {
-        res.send(links);
+        console.log(links);
+        res.send({ links });
       })
       .catch((error) => {
         console.log(error);
