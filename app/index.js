@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
@@ -11,26 +12,29 @@ const routes = require("./routes");
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(cookieParser);
 app.use(session({
   secret: config.sessionConfig.secret,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true },
+  // cookie: { secure: true },
   unset: "destroy",
   store: new MongoStore({
     url: config.dbConfig.url,
   }),
 }));
+config.passport();
 app.use(passport.initialize());
 app.use(passport.session());
-config.passport();
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-AUTHENTICATION, X-IP, withCredentials, Content-Type, Accept");
+  res.header("Access-Control-Allow-Credentials", true);
   next();
 });
-// app.use("/user/:userLogin/", authenticateUser);
+app.use("/user/:userLogin/", passport.authenticateUser());
 const port = 1212;
 
 mongoose.connect(config.dbConfig.url)

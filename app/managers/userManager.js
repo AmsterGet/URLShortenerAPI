@@ -18,8 +18,7 @@ const userManager = {
         let errorMessage = "Incorrect password!";
         if (!user) {
           errorMessage = "Infamous user!";
-        }
-        if (user.password === hash(userData.password).toString()) {
+        } else if (user.password === hash(userData.password).toString()) {
           console.log("User's password is ok!");
           return Promise.resolve(user);
         }

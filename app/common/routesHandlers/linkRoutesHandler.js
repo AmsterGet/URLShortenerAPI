@@ -9,9 +9,6 @@ const linkRoutesHandler = {
 
     Link.findOneAndUpdate(queryDetails, { $inc: { transitions: 1 } })
       .then((link) => {
-        // if (!link.originalUrl) {
-        //   throw new Error("");
-        // }
         res.redirect(link.originalUrl);
       })
       .catch((error) => {

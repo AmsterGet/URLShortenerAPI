@@ -2,6 +2,7 @@ const passport = require("passport");
 const models = require("../app/models");
 const LocalStrategy = require("passport-local").Strategy;
 const { userManager } = require("../app/managers/index");
+const authenticateUser = require("../app/common/middleware/authenticateUser");
 
 module.exports = () => {
   passport.use("signIn", new LocalStrategy({
@@ -11,6 +12,7 @@ module.exports = () => {
   (login, password, done) => {
     userManager.checkUser({ login, password })
       .then((user) => {
+        console.log(user);
         return done(null, user);
       })
       .catch((error) => {
@@ -37,12 +39,15 @@ module.exports = () => {
   }));
 
   passport.serializeUser((user, done) => {
-    done(null, user.id);
+    done(null, user._id);
   });
 
   passport.deserializeUser((id, done) => {
+    console.log("User from deserialize: " + id);
     models.User.findById(id, (error, user) => {
       done(error, user);
     });
   });
+
+  passport.authenticateUser = authenticateUser;
 };
