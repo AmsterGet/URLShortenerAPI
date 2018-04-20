@@ -2,7 +2,6 @@ const models = require("../../models/index");
 
 const authRoutesHandler = {
   signIn: (req, res, next) => {
-    console.log(req.cookie + res);
     const { user } = req;
     if (user) {
       models.Link.find({ "user": user._id })
