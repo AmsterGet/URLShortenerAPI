@@ -22,7 +22,7 @@ const userManager = {
           console.log("User's password is ok!");
           return Promise.resolve(user);
         }
-        return Promise.reject(new Error(errorMessage));
+        return Promise.reject(errorMessage);
       });
   },
 };

@@ -38,8 +38,10 @@ const userRoutesHandler = {
     const queryDetails = {
       login: userLogin,
     };
+    // console.log(userLogin);
     models.User.findOne(queryDetails)
       .then((user) => {
+        // console.log(user);
         return models.Link.find({ "user": user._id });
       })
       .then((links) => {
