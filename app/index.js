@@ -16,7 +16,6 @@ app.use(session({
   secret: config.sessionConfig.secret,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: true },
   unset: "destroy",
   store: new MongoStore({
     url: config.dbConfig.url,
