@@ -2,7 +2,7 @@ const passport = require("passport");
 const models = require("../app/models");
 const LocalStrategy = require("passport-local").Strategy;
 const { userManager } = require("../app/managers/index");
-const authenticateUser = require("../app/common/middleware/authenticateUser");
+const authenticateUser = require("../app/middleware/authenticateUser");
 
 module.exports = () => {
   passport.use("signIn", new LocalStrategy({

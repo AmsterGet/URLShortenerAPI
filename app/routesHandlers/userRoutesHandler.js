@@ -1,6 +1,6 @@
-const models = require("../../models/index");
-const utils = require("../utils/index");
-const { userManager, linkManager } = require("../../managers/index");
+const models = require("../models/index");
+const utils = require("../common/utils/index");
+const { userManager, linkManager } = require("../managers/index");
 
 const userRoutesHandler = {
   addNewLink: (req, res) => {

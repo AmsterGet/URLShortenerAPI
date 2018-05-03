@@ -1,4 +1,4 @@
-const linkRoutesHandler = require("../common/routesHandlers/linkRoutesHandler");
+const linkRoutesHandler = require("../routesHandlers/linkRoutesHandler");
 
 module.exports = (app) => {
   app.get("/:shortUrl", linkRoutesHandler.shortLinkRedirect);

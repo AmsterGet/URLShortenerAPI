@@ -1,5 +1,4 @@
-const userRoutesHandler = require("../common/routesHandlers/userRoutesHandler");
-// const authenticateUser = require("../common/middleware/authenticateUser");
+const userRoutesHandler = require("../routesHandlers/userRoutesHandler");
 
 module.exports = (app) => {
   app.route("/user/:userLogin/links/")

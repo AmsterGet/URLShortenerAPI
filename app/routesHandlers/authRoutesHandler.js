@@ -1,4 +1,4 @@
-const models = require("../../models/index");
+const models = require("../models/index");
 
 const authRoutesHandler = {
   signIn: (req, res, next) => {
