@@ -12,6 +12,7 @@ const authRoutesHandler = {
             login: user.login,
             name: user.name,
             mail: user.mail,
+            role: user.role,
             links: links || [],
           });
         });

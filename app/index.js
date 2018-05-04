@@ -32,7 +32,8 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);
   next();
 });
-app.use("/user/:userLogin/", passport.authenticateUser);
+app.use("/user/", passport.authenticateUser);
+app.use("/file/", passport.authenticateUser);
 const port = 1212;
 
 mongoose.connect(config.dbConfig.url)

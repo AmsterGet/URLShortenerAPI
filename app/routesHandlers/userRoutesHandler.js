@@ -4,12 +4,13 @@ const { userManager, linkManager } = require("../managers/index");
 
 const userRoutesHandler = {
   addNewLink: (req, res) => {
-    const { userLogin } = req.params;
+    const userId = req.user;
     const { originalUrl } = req.body;
     const shortUrl = utils.generateShortUrl();
     const queryDetails = {
-      login: userLogin,
+      _id: userId,
     };
+    // console.log(userId);
     const tags = linkManager.mapTagsToNotes(req.body.tags.split(", "));
     models.User.findOne(queryDetails)
       .then((user) => {
@@ -34,11 +35,11 @@ const userRoutesHandler = {
   },
 
   getUserLinks: (req, res) => {
-    const { userLogin } = req.params;
+    const userId = req.user;
     const queryDetails = {
-      login: userLogin,
+      _id: userId,
     };
-    // console.log(userLogin);
+    // console.log(userId);
     models.User.findOne(queryDetails)
       .then((user) => {
         // console.log(user);

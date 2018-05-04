@@ -1,5 +1,8 @@
+const fileRoutesHandler = require("../routesHandlers/fileRoutesHandler");
 
 module.exports = (app) => {
-  app.get("/file/csv", () => {});
-  app.post("/file/csv", () => {});
+  app.route("/file/csv/")
+    .get(fileRoutesHandler.getLinks)
+    .post(fileRoutesHandler.addLinks);
+  app.get("/file/csv/wholeDB", () => {});
 };
