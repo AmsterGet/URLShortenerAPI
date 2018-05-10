@@ -33,7 +33,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use("/user/", passport.authenticateUser);
-app.use("/file/", passport.authenticateUser);
+app.use("/file/csv/", passport.authenticateUser);
 const port = 1212;
 
 mongoose.connect(config.dbConfig.url)
