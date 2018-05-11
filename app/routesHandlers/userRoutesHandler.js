@@ -1,36 +1,54 @@
 const models = require("../models/index");
-const utils = require("../common/utils/index");
+const csv = require("fast-csv");
 const { userManager, linkManager } = require("../managers/index");
 
 const userRoutesHandler = {
   addNewLink: (req, res) => {
     const userId = req.user;
-    const { originalUrl } = req.body;
-    const shortUrl = utils.generateShortUrl();
-    const queryDetails = {
-      _id: userId,
+    const newLinkData = {
+      originalUrl: req.body.originalUrl,
+      description: req.body.description,
+      tags: req.body.tags,
+      user: userId,
     };
-    // console.log(userId);
-    const tags = linkManager.mapTagsToNotes(req.body.tags.split(", "));
-    models.User.findOne(queryDetails)
-      .then((user) => {
-        const newLink = new models.Link({
-          originalUrl,
-          shortUrl,
-          postDate: new Date(),
-          transitions: 0,
-          description: req.body.description,
-          tags,
-          user: user._id,
-        });
-        return newLink.save();
-      })
-      .then((link) => {
-        res.send(link);
+    linkManager.createLinks([newLinkData])
+      .then((links) => {
+        res.send(links);
       })
       .catch((error) => {
         console.log(error);
         res.send(error);
+      });
+  },
+
+  addCsvLinks: (req, res) => {
+    const userId = req.user;
+    const linksFile = req.files.file;
+    const linksToCreate = [];
+
+    csv
+      .fromString(linksFile.data.toString(), {
+        headers: true,
+        ignoreEmpty: true,
+      })
+      .on("data", (data) => {
+        const newLinkData = {
+          originalUrl: data.originalUrl,
+          description: data.description,
+          tags: data.tags,
+          user: userId,
+        };
+        linksToCreate.push(newLinkData);
+      })
+      .on("end", () => {
+        linkManager.createLinks(linksToCreate)
+          .then((links) => {
+            res.send(links);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.send(error);
+          });
       });
   },
 
