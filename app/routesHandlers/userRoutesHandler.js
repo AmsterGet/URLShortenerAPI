@@ -25,18 +25,16 @@ const userRoutesHandler = {
 
   addCsvLinks: (req, res) => {
     const userId = req.user;
-    const linksFile = req.body;
+    const linksString = Object.keys(req.body)[0];
     const linksToCreate = [];
-    console.log(linksFile);
 
     csv
-      .fromString(linksFile.toString(), {
+      .fromString(linksString.toString(), {
         headers: true,
         ignoreEmpty: true,
         delimiter: ";",
       })
       .on("data", (data) => {
-        console.log(data);
         const newLinkData = {
           originalUrl: data.originalUrl,
           description: data.description,
@@ -46,7 +44,6 @@ const userRoutesHandler = {
         linksToCreate.push(newLinkData);
       })
       .on("end", () => {
-        console.log(linksToCreate);
         linkManager.createLinks(linksToCreate)
           .then((links) => {
             res.send(links);
