@@ -1,5 +1,6 @@
 const models = require("../models/index");
 const csv = require("fast-csv");
+const Json2csvParser = require("json2csv").Parser;
 const { userManager, linkManager } = require("../managers/index");
 
 const userRoutesHandler = {
@@ -11,6 +12,7 @@ const userRoutesHandler = {
       tags: req.body.tags,
       user: userId,
     };
+    console.log(newLinkData);
     linkManager.createLinks([newLinkData])
       .then((links) => {
         res.send(links);
@@ -23,15 +25,18 @@ const userRoutesHandler = {
 
   addCsvLinks: (req, res) => {
     const userId = req.user;
-    const linksFile = req.files.file;
+    const linksFile = req.body;
     const linksToCreate = [];
+    console.log(linksFile);
 
     csv
-      .fromString(linksFile.data.toString(), {
+      .fromString(linksFile.toString(), {
         headers: true,
         ignoreEmpty: true,
+        delimiter: ";",
       })
       .on("data", (data) => {
+        console.log(data);
         const newLinkData = {
           originalUrl: data.originalUrl,
           description: data.description,
@@ -41,6 +46,7 @@ const userRoutesHandler = {
         linksToCreate.push(newLinkData);
       })
       .on("end", () => {
+        console.log(linksToCreate);
         linkManager.createLinks(linksToCreate)
           .then((links) => {
             res.send(links);

@@ -1,8 +1,8 @@
 const fileRoutesHandler = require("../routesHandlers/fileRoutesHandler");
 
 module.exports = (app) => {
-  app.route("/file/csv/")
-    .get(fileRoutesHandler.getLinks);
   app.get("/file/template", fileRoutesHandler.getTemplate);
+  app.get("/file/csv/links", fileRoutesHandler.getLinks);
+  app.get("/file/csv/links/:shortUrl", fileRoutesHandler.getLink);
   app.get("/file/csv/wholeDB", () => {});
 };
