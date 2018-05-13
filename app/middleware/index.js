@@ -1,10 +1,10 @@
 const passport = require("passport");
 const checkFileUpload = require("./checkFileUpload");
-const checkLinksDownload = require("./checkLinksDownload");
+const checkUserRole = require("./checkUserRole");
 
 module.exports = {
   signIn: passport.authenticate("signIn"),
   signUp: passport.authenticate("signUp"),
   checkFileUpload,
-  checkLinksDownload,
+  checkUserRole,
 };

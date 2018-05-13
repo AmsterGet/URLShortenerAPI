@@ -7,6 +7,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const config = require("../config");
 const routes = require("./routes");
+const middleware = require("./middleware");
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,7 +37,9 @@ app.use((req, res, next) => {
   next();
 });
 app.use("/user/", passport.authenticateUser);
+app.use("/user/admin/", middleware.checkUserRole);
 app.use("/file/csv/", passport.authenticateUser);
+app.use("/file/csv/users/", middleware.checkUserRole);
 const port = 1212;
 
 mongoose.connect(config.dbConfig.url)

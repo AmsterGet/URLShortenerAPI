@@ -1,12 +1,11 @@
-// const mongoose = require("mongoose");
 const Json2csvParser = require("json2csv").Parser;
-// const csv = require("fast-csv");
-const { linkManager } = require("../managers/index");
+const { linkManager, userManager } = require("../managers/index");
 const models = require("../models/index");
 
 const fileRoutesHandler = {
   getLink: (req, res) => {
     const { shortUrl } = req.params;
+    console.log(req.params);
     const queryDetails = {
       shortUrl,
     };
@@ -36,6 +35,42 @@ const fileRoutesHandler = {
       .then((links) => {
         const csvToSend = linkManager.convertLinksToCsv(links);
         res.set("Content-Disposition", "attachment; filename=My links.csv");
+        res.set("Content-Type", "application/octet-stream");
+        res.send(csvToSend);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.send(error);
+      });
+  },
+
+  getUser: (req, res) => {
+    const { login } = req.params;
+    const queryDetails = {
+      login,
+    };
+
+    userManager.getUsersList(queryDetails)
+      .then((user) => {
+        const csvToSend = userManager.convertUsersToCsv(user);
+        res.set("Content-Disposition", `attachment; filename=${login} data.csv`);
+        res.set("Content-Type", "application/octet-stream");
+        res.send(csvToSend);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.send(error);
+      });
+  },
+
+  getUsers: (req, res) => {
+    const queryDetails = {
+      role: "user",
+    };
+    userManager.getUsersList(queryDetails)
+      .then((users) => {
+        const csvToSend = userManager.convertUsersToCsv(users);
+        res.set("Content-Disposition", "attachment; filename=Users list.csv");
         res.set("Content-Type", "application/octet-stream");
         res.send(csvToSend);
       })

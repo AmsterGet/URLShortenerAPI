@@ -1,6 +1,6 @@
 const models = require("../models/index");
 const csv = require("fast-csv");
-const Json2csvParser = require("json2csv").Parser;
+// const Json2csvParser = require("json2csv").Parser;
 const { userManager, linkManager } = require("../managers/index");
 
 const userRoutesHandler = {
@@ -67,7 +67,7 @@ const userRoutesHandler = {
     models.User.findOne(queryDetails)
       .then((user) => {
         // console.log(user);
-        return models.Link.find({ "user": user._id });
+        return models.Link.find({ user: user._id });
       })
       .then((links) => {
         res.send({ links });
@@ -101,13 +101,52 @@ const userRoutesHandler = {
 
   removeLink: (req, res) => {
     const { shortUrl } = req.body;
-    const details = {
+    const queryDetails = {
       shortUrl,
     };
-    models.Link.remove(details)
-      .then((link) => {
+    models.Link.remove(queryDetails)
+      .then((status) => {
         console.log("Success - link was deleted!");
-        res.send(link);
+        res.send(status);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.send(error);
+      });
+  },
+
+  getUsers: (req, res) => {
+    const queryDetails = {
+      role: "user",
+    };
+
+    userManager.getUsersList(queryDetails)
+      .then((users) => {
+        res.send({ users });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.send(error);
+      });
+  },
+
+  removeUser: (req, res) => {
+    const { login } = req.body;
+    const queryDetails = {
+      login,
+    };
+    let userToDelete = {};
+    models.User.findOne(queryDetails)
+      .then((user) => {
+        userToDelete = user;
+        return models.Link.remove({ user: user._id });
+      })
+      .then(() => {
+        return models.User.remove({ _id: userToDelete._id });
+      })
+      .then((status) => {
+        console.log(`Success - ${userToDelete.login} and his links was deleted!`);
+        res.send(status);
       })
       .catch((error) => {
         console.log(error);
