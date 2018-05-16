@@ -9,5 +9,6 @@ module.exports = (app) => {
     .delete(userRoutesHandler.removeLink);
   app.route("/user/admin/users")
     .get(userRoutesHandler.getUsers)
+    .post(userRoutesHandler.addNewUser)
     .delete(userRoutesHandler.removeUser);
 };

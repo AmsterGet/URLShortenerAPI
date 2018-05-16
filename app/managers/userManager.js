@@ -9,6 +9,7 @@ const userManager = {
       login: userData.login,
       mail: userData.mail,
       password: hash(userData.password),
+      role: userData.role || "user",
     };
     const newUser = new models.User(user);
     return newUser.save();

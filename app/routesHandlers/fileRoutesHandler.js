@@ -64,8 +64,9 @@ const fileRoutesHandler = {
   },
 
   getUsers: (req, res) => {
+    const userId = req.user;
     const queryDetails = {
-      role: "user",
+      _id: { $ne: userId },
     };
     userManager.getUsersList(queryDetails)
       .then((users) => {

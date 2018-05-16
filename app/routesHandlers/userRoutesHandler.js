@@ -128,6 +128,18 @@ const userRoutesHandler = {
       });
   },
 
+  addNewUser: (req, res) => {
+    userManager.createUser(req.body)
+      .then((user) => {
+          console.log("Wrote in database: " + JSON.stringify(user));
+          res.send(user);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(401).send(error);
+      });
+  },
+
   removeUser: (req, res) => {
     const { login } = req.body;
     const queryDetails = {
