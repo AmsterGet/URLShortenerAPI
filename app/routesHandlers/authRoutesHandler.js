@@ -1,4 +1,3 @@
-
 const authRoutesHandler = {
   signIn: (req, res, next) => {
     console.log(req.error);
@@ -20,8 +19,9 @@ const authRoutesHandler = {
   signUp: (req, res) => {
     if (req.user) {
       res.send(req.user);
+    } else if (req.error()) {
+      res.send({ error: req.error().message });
     }
-    res.send(req.error);
   },
 
   signOut: (req, res) => {

@@ -20,14 +20,22 @@ const linkRoutesHandler = {
   getLinkInfo: (req, res) => {
     const { shortUrl } = req.params;
     const queryDetails = {
-      shortUrl,
+      shortUrl: { $regex: `${shortUrl}`, $options: "i" },
     };
-    Link.findOne(queryDetails)
-      .then((link) => {
-        if (!link) {
-          return res.status(404).send("Link was not found!");
+    Link.find(queryDetails)
+      .then((links) => {
+        let linksToSend;
+        if (!links.length) {
+          return res.status(404).send("Such link was not found!");
         }
-        res.send(link);
+        if (links.length === 1) {
+          linksToSend = links.pop();
+        } else {
+          linksToSend = links;
+        }
+        console.log("--------------------LINKS--------------------");
+        console.log(linksToSend);
+        res.send(linksToSend);
       })
       .catch((error) => {
         console.error(error);
