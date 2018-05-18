@@ -1,20 +1,14 @@
-const models = require("../models/index");
-
 const authRoutesHandler = {
   signIn: (req, res, next) => {
     console.log(req.error);
     const { user } = req;
     if (user) {
-      models.Link.find({ "user": user._id })
-        .then((links) => {
-          // console.log(links);
-          res.send({
-            login: user.login,
-            name: user.name,
-            mail: user.mail,
-            links: links || [],
-          });
-        });
+      res.send({
+        login: user.login,
+        name: user.name,
+        mail: user.mail,
+        role: user.role,
+      });
     } else {
       console.log(req.error);
       res.send(req.error);
@@ -25,8 +19,9 @@ const authRoutesHandler = {
   signUp: (req, res) => {
     if (req.user) {
       res.send(req.user);
+    } else if (req.error()) {
+      res.send({ error: req.error().message });
     }
-    res.send(req.error);
   },
 
   signOut: (req, res) => {

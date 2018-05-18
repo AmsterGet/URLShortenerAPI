@@ -43,7 +43,6 @@ module.exports = () => {
   });
 
   passport.deserializeUser((id, done) => {
-    console.log("User from deserialize: " + id);
     models.User.findById(id, (error, user) => {
       done(error, user);
     });

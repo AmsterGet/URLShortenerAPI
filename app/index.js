@@ -7,6 +7,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const config = require("../config");
 const routes = require("./routes");
+const middleware = require("./middleware");
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,6 +18,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   unset: "destroy",
+  cookie: {
+    maxAge: 9000000000,
+  },
   store: new MongoStore({
     url: config.dbConfig.url,
   }),
@@ -28,11 +32,14 @@ app.use(passport.session());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
   res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, X-AUTHENTICATION, X-IP, withCredentials, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, encType, X-Requested-With, X-AUTHENTICATION, X-IP, withCredentials, Content-Type, Accept, Content-Disposition");
   res.header("Access-Control-Allow-Credentials", true);
   next();
 });
-app.use("/user/:userLogin/", passport.authenticateUser);
+app.use("/user/", passport.authenticateUser);
+app.use("/user/admin/", middleware.checkUserRole);
+app.use("/file/csv/", passport.authenticateUser);
+app.use("/file/csv/users/", middleware.checkUserRole);
 const port = 1212;
 
 mongoose.connect(config.dbConfig.url)

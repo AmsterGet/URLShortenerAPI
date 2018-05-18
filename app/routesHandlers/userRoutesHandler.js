@@ -1,31 +1,21 @@
 const models = require("../models/index");
-const utils = require("../common/utils/index");
+const csv = require("fast-csv");
+// const Json2csvParser = require("json2csv").Parser;
 const { userManager, linkManager } = require("../managers/index");
 
 const userRoutesHandler = {
   addNewLink: (req, res) => {
-    const { userLogin } = req.params;
-    const { originalUrl } = req.body;
-    const shortUrl = utils.generateShortUrl();
-    const queryDetails = {
-      login: userLogin,
+    const userId = req.user;
+    const newLinkData = {
+      originalUrl: req.body.originalUrl,
+      description: req.body.description,
+      tags: req.body.tags,
+      user: userId,
     };
-    const tags = linkManager.mapTagsToNotes(req.body.tags.split(", "));
-    models.User.findOne(queryDetails)
-      .then((user) => {
-        const newLink = new models.Link({
-          originalUrl,
-          shortUrl,
-          postDate: new Date(),
-          transitions: 0,
-          description: req.body.description,
-          tags,
-          user: user._id,
-        });
-        return newLink.save();
-      })
-      .then((link) => {
-        res.send(link);
+    console.log(newLinkData);
+    linkManager.createLinks([newLinkData])
+      .then((links) => {
+        res.send(links);
       })
       .catch((error) => {
         console.log(error);
@@ -33,16 +23,48 @@ const userRoutesHandler = {
       });
   },
 
+  addCsvLinks: (req, res) => {
+    const userId = req.user;
+    const linksString = Object.keys(req.body)[0];
+    const linksToCreate = [];
+
+    csv
+      .fromString(linksString.toString(), {
+        headers: true,
+        ignoreEmpty: true,
+        delimiter: ";",
+      })
+      .on("data", (data) => {
+        const newLinkData = {
+          originalUrl: data.originalUrl,
+          description: data.description,
+          tags: data.tags,
+          user: userId,
+        };
+        linksToCreate.push(newLinkData);
+      })
+      .on("end", () => {
+        linkManager.createLinks(linksToCreate)
+          .then((links) => {
+            res.send(links);
+          })
+          .catch((error) => {
+            console.log(error);
+            res.send(error);
+          });
+      });
+  },
+
   getUserLinks: (req, res) => {
-    const { userLogin } = req.params;
+    const userId = req.user;
     const queryDetails = {
-      login: userLogin,
+      _id: userId,
     };
-    // console.log(userLogin);
+    // console.log(userId);
     models.User.findOne(queryDetails)
       .then((user) => {
         // console.log(user);
-        return models.Link.find({ "user": user._id });
+        return models.Link.find({ user: user._id });
       })
       .then((links) => {
         res.send({ links });
@@ -76,13 +98,65 @@ const userRoutesHandler = {
 
   removeLink: (req, res) => {
     const { shortUrl } = req.body;
-    const details = {
+    const queryDetails = {
       shortUrl,
     };
-    models.Link.remove(details)
-      .then((link) => {
+    models.Link.remove(queryDetails)
+      .then((status) => {
         console.log("Success - link was deleted!");
-        res.send(link);
+        res.send(status);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.send(error);
+      });
+  },
+
+  getUsers: (req, res) => {
+    const userId = req.user;
+    const queryDetails = {
+      _id: { $ne: userId },
+    };
+
+    userManager.getUsersList(queryDetails)
+      .then((users) => {
+        res.send({ users });
+      })
+      .catch((error) => {
+        console.log(error);
+        res.send(error);
+      });
+  },
+
+  addNewUser: (req, res) => {
+    userManager.createUser(req.body)
+      .then((user) => {
+          console.log("Wrote in database: " + JSON.stringify(user));
+          res.send(user);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(401).send(error);
+      });
+  },
+
+  removeUser: (req, res) => {
+    const { login } = req.body;
+    const queryDetails = {
+      login,
+    };
+    let userToDelete = {};
+    models.User.findOne(queryDetails)
+      .then((user) => {
+        userToDelete = user;
+        return models.Link.remove({ user: user._id });
+      })
+      .then(() => {
+        return models.User.remove({ _id: userToDelete._id });
+      })
+      .then((status) => {
+        console.log(`Success - ${userToDelete.login} and his links was deleted!`);
+        res.send(status);
       })
       .catch((error) => {
         console.log(error);
